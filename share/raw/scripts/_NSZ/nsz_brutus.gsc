@@ -52,6 +52,14 @@ function init()
 	level.brutus_base_health = 3500; 		// How much base health you want brutus to have. This health is multiplied by the round number. It caps at 85000 health
 	level.brutus_lock_machines = false; 		// Set to true if you have placed and want Brtutus to lock Perk Machines/PaP
 	// ================ End: Variables You Can Change if You Like :End =====================
+	level.ghost_idle_sound_durations = [];
+	level.ghost_idle_sound_durations[0] = 1.9;
+	level.ghost_idle_sound_durations[1] = 2.0;
+	level.ghost_idle_sound_durations[2] = 2.0;
+	level.ghost_idle_sound_durations[3] = 1.25;
+	level.ghost_idle_sound_durations[4] = 4.6;
+	level.ghost_idle_sound_durations[5] = 3.75;
+	level.ghost_idle_sound_durations[6] = 3.75;
 	level.current_brutuses = 0; 
 	level.octobomb_targets = &remove_brutus; 
 	
@@ -158,8 +166,10 @@ function spawn_brutus()
 		return; 
 	}
 	
-	playsound_to_players( "brutus_prespawn" ); 
-	wait(3); 
+	prespawn_sound_suffix = randomint(3);
+	nsz_iprintlnbold("ghost prespawn index = " + prespawn_sound_suffix);
+	playsound_to_players( "ghost_boss_prespawn_" + prespawn_sound_suffix );
+	wait(10); 
 	playsound_to_players( "brutus_vox_spawn" ); 
 	playsound_to_players( "brutus_spawn_short" ); 
 	
@@ -167,7 +177,7 @@ function spawn_brutus()
 	brutus attach_helmet(); 
 	brutus attach_light(); 
 	brutus thread zombie_spawn_init();
-	brutus thread boss_footsteps(); 
+	brutus thread idle_sounds(); 
 	brutus thread melee_track(); 
 	brutus thread note_tracker(); 
 	brutus thread new_death(); 
@@ -564,16 +574,15 @@ function boss_think()
 	self.zombie_think_done = true;
 }
 
-function boss_footsteps()
+function idle_sounds()
 {
 	self endon( "death" ); 
 	
 	while(1)
 	{
-		self waittill( "footstep" ); 
-		Earthquake( 0.2, 1, self.origin ,750 );
-		// PlayRumbleOnPosition( "grenade_rumble", self.origin );  fix later
-		self Playsound( "brutus_step_0"+randomintrange(0,2) ); 
+		idle_sound_suffix = randomint(level.ghost_idle_sound_durations.size);
+		self Playsound("ghost_boss_idle_" + idle_sound_suffix);
+		wait(level.ghost_idle_sound_durations[idle_sound_suffix] + (randomintrange(500, 8000)/1000.0));
 	}
 }
 
