@@ -1,0 +1,26 @@
+>class,zm_mod_level
+>group,modtools
+
+xmodel,skybox_default_day
+material,luts_t7_default
+	
+// BSP
+col_map,maps/zm/zm_phasmo.d3dbsp
+gfx_map,maps/zm/zm_phasmo.d3dbsp
+
+// Audio
+sound,zm_phasmo
+
+scriptparsetree,scripts/zm/zm_phasmo.gsc
+scriptparsetree,scripts/zm/zm_phasmo.csc
+
+// NSZ Brutus
+scriptparsetree,scripts/_NSZ/nsz_brutus.gsc
+scriptbundle,brutus_bundle
+xmodel,brutus_helmet
+xmodel,bo2_brutus_fb_death
+xmodel,perk_clip
+fx,_NSZ/Brutus/spawn_fx
+fx,_NSZ/Brutus/chest_fx
+fx,_NSZ/Brutus/helmet_smoke
+fx,fire/fx_fire_ground_rubble_50x50

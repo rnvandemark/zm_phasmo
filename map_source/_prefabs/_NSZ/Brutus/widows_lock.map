@@ -1,0 +1,47 @@
+iwmap 4
+"script_startingnumber" 0
+"000_Global" flags  active
+"The Map" flags expanded 
+// entity 0
+{
+guid "{C151572C-D5F2-11E6-9F20-D43D7E9F9DAB}"
+"classname" "worldspawn"
+"lightingquality" "1024"
+"samplescale" "1"
+"skyboxmodel" "skybox_default_day"
+"ssi" "default_day"
+"wsi" "default_day"
+"fsi" "default"
+"gravity" "800"
+"lodbias" "default"
+"lutmaterial" "luts_t7_default"
+"numOmniShadowSlices" "24"
+"numSpotShadowSlices" "64"
+"sky_intensity_factor0" "1"
+"sky_intensity_factor1" "1"
+"state_alias_1" "State 1"
+"state_alias_2" "State 2"
+"state_alias_3" "State 3"
+"state_alias_4" "State 4"
+}
+// entity 1
+{
+guid "{6E536B98-D5F2-11E6-9F20-D43D7E9F9DAB}"
+"classname" "script_struct"
+"_color" "0 1 0.1177"
+"angles" "0 360 0"
+"origin" "-2.09808e-005 -35.25 9.0387"
+"script_noteworthy" "perk_machine"
+"script_string" "specialty_widowswine"
+"target" "auto1"
+"targetname" "brutus_lock"
+}
+// entity 2
+{
+guid "{6E536B95-D5F2-11E6-9F20-D43D7E9F9DAB}"
+"classname" "script_struct"
+"angles" "0 360 0"
+"origin" "2.28882e-005 3.8147e-006 0.0387096"
+"targetname" "auto1"
+"_color" "1 0 0"
+}

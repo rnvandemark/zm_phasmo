@@ -1,0 +1,39 @@
+iwmap 4
+"script_startingnumber" 0
+"000_Global" flags  active
+"The Map" flags expanded 
+// entity 0
+{
+guid "{217E0FA8-D5F4-11E6-8DF8-1C1B0D04B2D7}"
+"classname" "worldspawn"
+"fsi" "default"
+"gravity" "800"
+"lodbias" "default"
+"lutmaterial" "luts_t7_default"
+"numOmniShadowSlices" "24"
+"numSpotShadowSlices" "64"
+"sky_intensity_factor0" "1"
+"sky_intensity_factor1" "1"
+"state_alias_1" "State 1"
+"state_alias_2" "State 2"
+"state_alias_3" "State 3"
+"state_alias_4" "State 4"
+}
+// entity 1
+{
+guid "{318BB609-D5F4-11E6-8DF8-1C1B0D04B2D7}"
+"classname" "script_struct"
+"targetname" "auto1"
+"_color" "1 0 0"
+}
+// entity 2
+{
+guid "{318BB60C-D5F4-11E6-8DF8-1C1B0D04B2D7}"
+"classname" "script_struct"
+"_color" "0 1 0.1177"
+"origin" "0 -31 9"
+"script_noteworthy" "perk_machine"
+"script_string" "specialty_fastreload"
+"target" "auto1"
+"targetname" "brutus_lock"
+}

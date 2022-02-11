@@ -1,0 +1,7 @@
+#
+anim_zombie_brutus_idle,brutus_idle
+anim_zombie_brutus_sprint,brutus_run
+anim_zombie_brutus_melee,brutus_swing
+anim_zombie_brutus_death,brutus_death
+anim_zombie_taunt,brutus_run
+void,void
