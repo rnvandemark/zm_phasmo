@@ -44,3 +44,14 @@ ghost_boss_idle_6,,,_pmzm\ghost_boss\idle6_3750ms.wav,,,UIN_MOD,,,,,,,,,0,0,95,1
 
 --------------------------------------------------
 3) Compile your map as usual and you are done!
+
+## Useful links for development
+
+- [Collection of useful links and tips (Reddit)](https://www.reddit.com/r/CODZombies/comments/58nbvq/black_ops_3_mod_tools_super_guide/)
+- [Collection of useful links and tips (Modme Wiki)](https://wiki.modme.co/wiki/Game-Support-_-Black-Ops-3.html)
+- [Modme - Importing models from other CoD games](https://wiki.modme.co/wiki/black_ops_3/basics/Import-models-from-Call-of-Duty-games.html)
+- [Zeroy - BO3 source code explorer](https://bo3explorer.zeroy.com/globals.html)
+- [Zeroy - Scripting syntax and grammar](https://wiki.zeroy.com/index.php?title=Call_of_Duty_5:_Scripting_Syntax_And_Grammar)
+
+Local files:
+- /your/path/to/Steam/steamapps/common/Call of Duty Black Ops III/docs_modtools/bo3_scriptapifunctions.htm
