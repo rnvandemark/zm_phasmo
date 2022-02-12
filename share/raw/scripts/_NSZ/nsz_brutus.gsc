@@ -18,21 +18,10 @@
 
 #namespace brutus;
 
-#precache("model", "brutus_helmet");
 #precache("model", "bo2_brutus_fb_death");
-#precache("model", "perk_clip");
 
 #define SPAWN_FX "_NSZ/Brutus/spawn_fx"
 #precache("fx", SPAWN_FX);
-
-#define CHEST_FX "_NSZ/Brutus/chest_fx"
-#precache("fx", CHEST_FX);
-
-#define HELMET_SMOKE "_NSZ/Brutus/helmet_smoke"
-#precache("fx", HELMET_SMOKE);
-
-#define LOCK_FX "fire/fx_fire_ground_rubble_50x50"
-#precache("fx", LOCK_FX);
 
 function nsz_iprintlnbold(string)
 {
@@ -55,26 +44,16 @@ function init()
 	// Used to set players invicible for testing
 	level.player_debug = false;
 
-	// The maximum brutuss you want
-	level.max_brutus = 2;
-
 	// The minimum rounds to wait until brutus spawns next
-	level.min_brutus_round = 5;
+	level.min_brutus_round = 2;
 
 	// The max rounds to wait until brutus spawns next
-	level.max_brutus_round = 7;
-
-	// If you want multiple brutus, they will spawn in multiples after this
-	// round
-	level.multiple_brutus_round = 20;
+	level.max_brutus_round = 3;
 
 	// How much base health you want brutus to have
 	// This health is multiplied by the round number
 	// It caps at 85000 health, in spawn_brutus()
 	level.brutus_base_health = 3500;
-
-	// Set to true if you have placed and want Brutus to lock Perk Machines/PaP
-	level.brutus_lock_machines = false;
 
 	// The duration, in seconds, of each sound that the ghost can have while
 	// idly moving about
@@ -88,7 +67,7 @@ function init()
 	level.ghost_idle_sound_durations[6] = 3.75;
 
 	// The current number of Brutus spawned
-	level.current_brutuses = 0; 
+	level.brutus_active = false;
 
 	// What's an octobomb?! Nonetheless, it probably nukes Brutuses by calling
 	// this function, an event-listener-esque callback
@@ -192,23 +171,8 @@ function brutus_spawn_logic()
 				level.next_brutus_round++;
 			}
 
-			// Spawn Brutuses until we've reached the max amount
-			while (level.current_brutuses < level.max_brutus)
-			{
-				// Make it feel a little random by waiting XXX seconds
-				wait(RandomIntRange(1, 20));
-
-				// Spawn Brutus in this thread, break this while loop if necessary
-				if ((level.current_brutuses < level.max_brutus) && (level.round_number >= level.multiple_brutus_round))
-				{
-					level spawn_brutus();
-				}
-				else if (level.current_brutuses < level.max_brutus)
-				{
-					level spawn_brutus();
-					break;
-				}
-			}
+			// Spawn the Brutus
+			level spawn_brutus();
 		}
 	}
 }
@@ -216,14 +180,12 @@ function brutus_spawn_logic()
 function spawn_brutus()
 {
 	// Spawn a Brutus at a chosen spawner after XXX seconds of waiting
-	level.current_brutuses++;
 	spawner = GetEnt("zombie_brutus", "script_noteworthy");
 	wait(RandomIntRange(5, 20));
 	spot = choose_a_spawn();
 	if (!isDefined(spot))
 	{
 		nsz_iprintlnbold("^1 No Available Spots For brutus");
-		level.current_brutuses--;
 		return;
 	}
 
@@ -232,12 +194,12 @@ function spawn_brutus()
 	if (level flag::exists("dog_round") && level flag::get("dog_round"))
 	{
 		nsz_iprintlnbold("^1 It is a dog Round Spawn him next round");
-		level.current_brutuses--;
 		level.next_brutus_round = level.round_number + 1;
 		return;
 	}
 
-	nsz_iprintlnbold("Spawning Brutus #" + level.current_brutuses);
+	level.brutus_active = true;
+	nsz_iprintlnbold("Spawning Brutus!");
 
 	// Play a randomly selected ghost pre-spawn sound
 	prespawn_sound_suffix = randomint(3);
@@ -252,11 +214,9 @@ function spawn_brutus()
 	// Spawn Brutus with the Brutus spawner entity
 	// Build him, and run threads to help maintain him
 	brutus = zombie_utility::spawn_zombie(spawner);
-	brutus attach_helmet();
-	brutus attach_light();
 	brutus thread zombie_spawn_init();
 	brutus thread idle_sounds();
-	brutus thread melee_track();
+	brutus thread check_for_ghost_reached_player();
 	brutus thread note_tracker();
 	brutus thread new_death();
 	brutus thread aat_override();
@@ -300,41 +260,24 @@ function spawn_brutus()
 	brutus.thundergun_fling_func = &new_thundergun_fling_func;
 	brutus.thundergun_knockdown_func = &new_knockdown_damage;
 	brutus.is_boss = true;
-
-	brutus thread track_helmet();
 	
 	brutus ForceTeleport(spot.origin, spot.angles, 1);
 	brutus AnimScripted("note_notify", brutus.origin, brutus.angles, %brutus_spawn);
 	PlayFx(SPAWN_FX, brutus.origin);
-	Earthquake(0.4, 4, brutus.origin, 5000);
 	wait(GetAnimLength(%brutus_spawn)); // Wait until the end of the animation
 
-	// brutus thread debug_health();
-	brutus thread custom_find_flesh();
-	if (level.brutus_lock_machines)
+	all_zombies = zombie_utility::get_zombie_array();
+	foreach (zomb in all_zombies)
 	{
-		brutus thread watch_for_machines();
+		if (!zomb.is_boss)
+		{
+			//
+			// Do stuff here to all other zombies
+			//
+		}
 	}
-}
 
-function attach_light()
-{
-	//
-	// I'm sure this will be removed...
-	//
-
-	fire_angles = self.angles;
-	fire_angles_forward = anglesToForward(fire_angles);
-	fire_init = self.origin + (0, 0, 57);
-	impact = fire_init + vectorScale(fire_angles_forward, 9);
-	light = spawn("script_model", impact);
-	light SetModel("tag_origin");
-	light.angles = self.angles;
-	light EnableLinkTo();
-	light LinkTo(self, "j_spineupper");
-	PlayFxOnTag(CHEST_FX, light, "tag_origin");
-
-	self.light = light;
+	brutus thread custom_find_flesh();
 }
 
 function aat_override()
@@ -398,21 +341,10 @@ function aat_override()
 	level.aat[ZM_AAT_TURNED_NAME].immune_result_indirect[archetype] = false;
 }
 
-function debug_health()
-{
-	while (1)
-	{
-		self.health = 100000;
-		wait(0.05);
-	}
-}
-
 function custom_find_flesh()
 {
-	// Have Brutus recalculate its target player until either death or he goes
-	// to lock a perk machine, the box, etc
+	// Have Brutus recalculate its target player until death
 	self endon("death");
-	self endon("locking_target");
 
 	while (1)
 	{
@@ -452,212 +384,6 @@ function custom_find_flesh()
 	}
 }
 
-function watch_for_machines()
-{
-	// Watch for perk, PaP, or mystery box to lock until death
-	self endon("death");
-
-	while (1)
-	{
-		// Look for all structs which identify objects which can be locked
-		locks = struct::get_array("brutus_lock", "targetname");
-		targets = array::get_all_closest(self.origin, locks);
-
-		// Loop through all locks in order of how they close they are to Brutus
-		for (i = 0; i < locks.size; i++)
-		{
-			//
-			// If a machine is visible and all other requirements are met, go
-			// to lock it. Afterwards, have Brutus continue to find a player to
-			// target, then continue this loop.
-			//
-
-			if (targets[i].script_noteworthy == "perk_machine" && !isDefined(targets[i].alread_locked) && Distance2d(self.origin, targets[i].origin) < 300 && BulletTracePassed(self.origin, targets[i].origin, false, self))
-			{
-				perk_trig = get_perk_trig(targets[i].script_string);
-				if (perk_trig.power_on)
-				{
-					targets[i].alread_locked = true;
-					nsz_iprintlnbold("^2Acquired New Brutus Lock Perk");
-					self waittill_perk_lock_complete(targets[i]);
-					self thread custom_find_flesh();
-				}
-			}
-
-			if (targets[i].script_noteworthy == "magic_box" && !isDefined(targets[i].alread_locked) && Distance2d(self.origin, targets[i].origin) < 300 && BulletTracePassed(self.origin, targets[i].origin, false, self))
-			{
-				box = ArrayGetClosest(targets[i].origin, level.chests);
-				// iprintlnbold(box.zbarrier zm_magicbox::get_magic_box_zbarrier_state());
-				if (box.zbarrier.state == "initial" || box.zbarrier.state == "close")
-				{
-					targets[i].alread_locked = true;
-					nsz_iprintlnbold("^2Acquired New Brutus Lock Magic Box");
-					self waittill_box_lock_complete(targets[i], box);
-					self thread custom_find_flesh();
-				}
-			}
-
-			wait(0.05);
-		}
-	}
-}
-
-function get_perk_trig(perk)
-{
-	perk_trigs = GetEntArray("zombie_vending", "targetname");
-	foreach (trig in perk_trigs)
-	{
-		if (trig.script_noteworthy == perk)
-		{
-			return trig;
-		}
-	}
-}
-
-function waittill_perk_lock_complete(lock_struct)
-{
-	// Wait until the given lock struct has finished being locked
-	self notify("locking_target");
-
-	while (Distance2d(lock_struct.origin, self.origin) > 55)
-	{
-		self.v_zombie_custom_goal_pos = lock_struct.origin;
-		wait(0.05);
-	}
-
-	fx = struct::get_array(lock_struct.target, "targetname");
-	fx = array::get_all_closest(lock_struct.origin, fx);
-	self OrientMode("face point", undefined, undefined, fx[0].origin);
-	self util::waittill_any_timeout(0.5, "orientdone");
-	
-	self AnimScripted("note_notify", self.origin, self.angles, %brutus_lock_perk);
-	wait(GetAnimLength(%brutus_lock_perk)/2);
-	// lock_struct.alread_locked = true;
-	foreach (spot in fx)
-	{
-		nsz_iprintlnbold("^2Light Fire");
-		spot.model = spawn("script_model", spot.origin);
-		spot.model SetModel("tag_origin");
-		PlayFxOnTag(LOCK_FX, spot.model, "tag_origin");
-	}
-
-	nsz_iprintlnbold("^2Locked: " + lock_struct.script_string);
-	trig = get_perk_trig(lock_struct.script_string);
-	if (!isDefined(trig))
-	{
-		iprintlnbold("^1No Perk Trig");
-	}
-	trig SetTeamForTrigger("axis");
-	// iprintlnbold(trig.origin);
-	trig.machine PlayLoopSound("brutus_lock_loop");
-	trig SetInvisibleToAll();
-	t_use = Spawn("trigger_radius_use", trig.origin, 0, 60, 80);
-	t_use TriggerIgnoreTeam();
-	t_use SetVisibleToAll();
-	t_use SetTeamForTrigger("none");
-	t_use UseTriggerRequireLookAt();
-	t_use SetCursorHint("HINT_NOICON");
-	t_use SetHintString("Press and Hold ^3&&1^7 to Unlock [Cost: 2000]");
-
-	t_use.perk_trigger = trig;
-	t_use.fx = fx;
-	t_use.cost = 2000;
-	t_use.lock_struct = lock_struct;
-	
-	t_use thread locked_think();
-}
-
-function waittill_box_lock_complete(lock_struct, box_trig)
-{
-	// Wait until the given lock struct has finished being locked
-	self notify("locking_target");
-
-	while (Distance2d(lock_struct.origin, self.origin) > 35)
-	{
-		self.v_zombie_custom_goal_pos = lock_struct.origin;
-		wait(0.05);
-	}
-
-	self AnimScripted("note_notify", self.origin, self.angles, %brutus_lock_box);
-	wait(GetAnimLength(%brutus_lock_box)/2);
-	// lock_struct.alread_locked = true;
-	fx = struct::get_array(lock_struct.target, "targetname");
-	foreach (spot in fx)
-	{
-		nsz_iprintlnbold("^2Light Fire");
-		spot.model = spawn("script_model", spot.origin);
-		spot.model SetModel("tag_origin");
-		PlayFxOnTag(LOCK_FX, spot.model, "tag_origin");
-	}
-
-	trig = box_trig;
-	// machine = getentarray(level._custom_perks[perk].radiant_machine_name, "targetname");
-
-	// trig SetInvisibleToAll();
-	trig notify("kill_chest_think");
-	thread zm_unitrigger::unregister_unitrigger(trig.unitrigger_stub);
-	if (trig.zbarrier.state == "open")
-	{
-		trig.zbarrier thread zm_magicbox::set_magic_box_zbarrier_state("close");
-	}
-	t_use = Spawn("trigger_radius_use", trig.origin, 0, 40, 80);
-	t_use TriggerIgnoreTeam();
-	t_use SetVisibleToAll();
-	t_use SetTeamForTrigger("none");
-	t_use UseTriggerRequireLookAt();
-	t_use SetCursorHint("HINT_NOICON");
-	t_use SetHintString("Press and Hold ^3&&1^7 to Unlock [Cost: 2000]");
-
-	t_use.fx = fx;
-	t_use.cost = 2000;
-	t_use.lock_struct = lock_struct;
-	t_use.sound_ent = t_use.fx[0].model;
-	t_use.sound_ent PlayLoopSound("brutus_lock_loop");
-
-	t_use thread locked_think(trig);
-}
-
-function locked_think(trig)
-{
-	while (1)
-	{
-		self waittill("trigger", player);
-		if (player.score >= self.cost)
-		{
-			player zm_score::minus_to_player_score(self.cost);
-			PlaySoundAtPosition("zmb_cha_ching", self.origin);
-			if (isDefined(self.perk_trigger))
-			{
-				self.perk_trigger.machine StopLoopSound(2);
-			}
-			if (isDefined(self.sound_ent))
-			{
-				self.sound_ent StopLoopSound(2);
-			}
-			wait(0.05);
-			if (isDefined(self.perk_trigger))
-			{
-				self.perk_trigger SetTeamForTrigger("allies");
-			}
-			foreach (fx in self.fx)
-			{
-				fx.model delete();
-			}
-			self.lock_struct.alread_locked = undefined;
-			self delete();
-			if (isDefined(trig))
-			{
-				trig thread zm_magicbox::treasure_chest_think();
-				trig.zbarrier thread zm_magicbox::set_magic_box_zbarrier_state("initial");
-			}
-		}
-		else
-		{
-			PlaySoundAtPosition("nsz_deny", player.origin);
-		}
-	}
-}
-
 function choose_a_spawn()
 {
 	// Return a Brutus spawn point closest to a random player
@@ -671,14 +397,14 @@ function choose_a_spawn()
 
 function boss_think()
 {
-	self endon( "death" ); 
-	assert( !self.isdog );
+	self endon("death"); 
+	assert(!self.isdog);
 	
 	self.ai_state = "zombie_think";
 	self.find_flesh_struct_string = "find_flesh";
 
-	self SetGoal( self.origin );
-	self PathMode( "move allowed" );
+	self SetGoal(self.origin);
+	self PathMode("move allowed");
 	self.zombie_think_done = true;
 }
 
@@ -694,159 +420,128 @@ function idle_sounds()
 	}
 }
 
-function melee_track()
+function check_for_ghost_reached_player()
 {
-	self endon( "death" ); 
+	// Check for if the ghost reached the player for its lifetime
+	self endon("death"); 
 	
-	while(1)
+	while (1)
 	{
-		if( Distance2d( self.brutus_enemy.origin, self.origin ) < 75 && BulletTracePassed( self.brutus_enemy.origin, self.origin, 0, self, self.brutus_enemy )  )
+		if (Distance2d(self.brutus_enemy.origin, self.origin ) < 75 && BulletTracePassed(self.brutus_enemy.origin, self.origin, 0, self, self.brutus_enemy))
 		{
-			self AnimScripted( "note_notify", self.origin, self.angles, %brutus_swing ); 
-			wait( GetAnimLength( %brutus_swing ) ); 
+			self AnimScripted("note_notify", self.origin, self.angles, %brutus_swing);
+			wait(GetAnimLength(%brutus_swing));
 		}
-		wait(0.05); 
+		wait(0.05);
 	}
 }
 
 function note_tracker()
 {
-	self endon( "death" ); 
+	self endon("death");
 	
-	while(1)
+	while (1)
 	{
-		self waittill( "note_notify", note ); 
-		if( note == "swing" )
+		self waittill("note_notify", note); 
+		if (note == "swing")
 		{
-			chance =  RandomIntRange(0,2); 
-			self PlaySound( "brutus_swing_0"+chance ); 
-			PlaySoundAtPosition( "brutus_vox_swing", self.origin ); 
-			players = getplayers(); 
-			foreach( player in players )
+			self PlaySound("brutus_swing_0" + randomint(2)); 
+			PlaySoundAtPosition("brutus_vox_swing", self.origin);
+			foreach (player in getplayers())
 			{
-				if( Distance2d(player.origin, self.origin) < 150 && self.brutus_enemy == player )
+				if (Distance2d(player.origin, self.origin) < 150 && self.brutus_enemy == player)
 				{
-					Earthquake( .25, 3, player.origin, 50 ); 
-					player shellShock( "frag_grenade_mp", 1 ); 
-					player DoDamage( 75, player.origin, self ); 
+					player DoDamage(75, player.origin, self);
 				}
 			}
 		}
-		if( note == "spawn_complete" )
+		if (note == "spawn_complete")
 		{
-			self playsound( "brutus_spawn" ); 
-			Earthquake( 0.4, 4, self.origin, 1000 ); 
+			self playsound("brutus_spawn");
 		}
-		if( note == "summon" )
+		if (note == "summon")
 		{
-			self playsound( "brutus_spawn" ); 
-			PlaySoundAtPosition( "brutus_vox_yell", self.origin ); 
+			self playsound("brutus_spawn");
+			PlaySoundAtPosition("brutus_vox_yell", self.origin);
 		}
-		
-		if( note == "lock" )
-		{
-			self playsound( "brutus_lock" ); 
-			PlaySoundAtPosition( "brutus_vox_swing", self.origin ); 
-			self playsound( "brutus_clang" ); 
-		}
-		
 	}
 }
 
 function new_death()
 {
-	self waittill( "death" );
-	self.light delete(); 
-	level.current_brutuses--;
-	PlayFx( SPAWN_FX, self.origin ); 
-	
-	if( level.current_brutuses < 1 )
-		thread zm_powerups::specific_powerup_drop( undefined, self.origin);
-	
-	self PlaySound( "brutus_helmet" ); 
-	self PlaySound( "brutus_defeated_0"+randomintrange(0,3) ); 
-	self PlaySound( "brutus_death" ); 
-	nsz_iprintlnbold( "^2Brutus Died" ); 
-	clone = spawn( "script_model", self.origin ); 
-	clone.angles = self.angles; 
-	clone SetModel( "bo2_brutus_fb" ); 
-	self hide(); 
-	clone UseAnimTree( #animtree ); 
-	clone AnimScripted( "placeholder", clone.origin, clone.angles, %brutus_death );	
-	wait( GetAnimLength(%brutus_death) ); 
-	self delete(); 
-	wait(30); 
-	clone delete(); 
-}
+	// Wait until Brutus dies
+	self waittill("death");
 
-function attach_helmet()
-{
-	self.helmet = spawn( "script_model", self GetTagOrigin("j_head") ); 
-	self.helmet SetModel( "brutus_helmet" ); 
-	self.helmet.angles = self GetTagAngles("j_head"); 
-	self.helmet EnableLinkTo(); 
-	self.helmet LinkTo( self, "j_head" ); 
+	// Mark Brutus as dead and inactive
+	level.brutus_active = false;
+	nsz_iprintlnbold("^2Brutus Died");
+
+	// Reuse the spawn effect
+	PlayFx(SPAWN_FX, self.origin);
+
+	// Spawn a random powerup
+	thread zm_powerups::specific_powerup_drop(undefined, self.origin);
+
+	// Overlap a couple of death sounds
+	self PlaySound("brutus_defeated_0" + randomintrange(0, 3));
+	self PlaySound("brutus_death");
+
+	// Clone the Brutus model and adjust the angles to the specified pose
+	// Hide the delete the model of the Brutus that was originally killed
+	clone = spawn("script_model", self.origin);
+	clone.angles = self.angles;
+	clone SetModel("bo2_brutus_fb");
+	self hide();
+	clone UseAnimTree(#animtree);
+	clone AnimScripted("placeholder", clone.origin, clone.angles, %brutus_death);
+	wait(GetAnimLength(%brutus_death));
+	self delete();
+
+	// Wait for a little then delete the cloned model
+	wait(30);
+	clone delete();
 }
 
 function playsound_to_players(sound)
 {
-	players = getplayers(); 
-	foreach( player in players )
-		player PlayLocalSound( sound );
-}
-
-function track_helmet()
-{
-	pop_off = self.health/2; 
-	while(self.health > pop_off )
-		wait(0.05); 
-	
-	self PlaySound( "brutus_helmet" ); 
-	self PlaySound( "brutus_vox_yell" ); 
-	
-	self.helmet Unlink(); 
-	self.helmet Launch( (0,0,200), (0,200,200) ); 
-	
-	PlayFxOnTag( HELMET_SMOKE, self, "j_head" ); 
-	
-	self AnimScripted( "note_notify", self.origin, self.angles, %brutus_headpain, undefined, undefined, undefined, .1 ); 
-	wait( GetAnimLength(%brutus_headpain) ); 
-	self AnimScripted( "note_notify", self.origin, self.angles, %brutus_enrage, undefined, undefined, undefined, .2 ); 
-	wait(5); 
-	self.helmet delete(); 
-}
-
-function anti_instakill( player, mod, hit_location )
-{
-	return true; 
-}
-
-function new_thundergun_fling_func( player )
-{
-	self DoDamage( 5000, self.origin, player ); 
-}
-
-function new_tesla_damage_func( origin, player )
-{
-	self DoDamage( 4000, self.origin, player ); 
-}
-
-function new_knockdown_damage( player, gib )
-{
-	self DoDamage( 1000, self.origin, player ); 
-}
-
-function remove_brutus( ai )
-{
-	foreach( zom in ai )
+	foreach (player in getplayers())
 	{
-		if( isDefined(zom.is_boss) )
-			ArrayRemoveValue( ai, zom, false ); 
+		player PlayLocalSound(sound);
 	}
-	return ai; 
 }
 
-// set up zombie walk cycles ================================================================================
+function anti_instakill(player, mod, hit_location)
+{
+	return true;
+}
+
+function new_thundergun_fling_func(player)
+{
+	// Do nothing
+}
+
+function new_tesla_damage_func(origin, player)
+{
+	// Do nothing
+}
+
+function new_knockdown_damage(player, gib)
+{
+	// Do nothing
+}
+
+function remove_brutus(ai)
+{
+	foreach (zom in ai)
+	{
+		if (isDefined(zom.is_boss))
+		{
+			ArrayRemoveValue(ai, zom, false);
+		}
+	}
+	return ai;
+}
+
 function zombie_spawn_init()
 {
 	self.targetname = "zombie_boss";
@@ -855,18 +550,15 @@ function zombie_spawn_init()
 	//A zombie was spawned - recalculate zombie array
 	zm_utility::recalc_zombie_array();
 	self.animname = "zombie_boss"; 		
-	
-	//pre-spawn gamemodule init
-	// if(isdefined(zm_utility::get_gamemode_var("pre_init_zombie_spawn_func")))
-	// {
-		// self [[zm_utility::get_gamemode_var("pre_init_zombie_spawn_func")]]();
-	// }
 	 
 	self.ignoreme = false;
-	self.allowdeath = true; 			// allows death during animscripted calls
-	self.force_gib = true; 		// needed to make sure this guy does gibs
-	self.is_zombie = true; 			// needed for melee.gsc in the animscripts
-	self allowedStances( "stand" );
+	// allows death during animscripted calls
+	self.allowdeath = true;
+	// needed to make sure this guy does gibs
+	self.force_gib = true;
+	// needed for melee.gsc in the animscripts
+	self.is_zombie = true;
+	self allowedStances("stand");
 	
 	//needed to make sure zombies don't distribute themselves amongst players
 	self.attackerCountThreatScale = 0;
@@ -880,17 +572,13 @@ function zombie_spawn_init()
 	self.fovcosine = 0;
 	self.fovcosinebusy = 0;
 	
-	self.zombie_damaged_by_bar_knockdown = false; // This tracks when I can knock down a zombie with a bar
+	// This tracks when I can knock down a zombie with a bar
+	self.zombie_damaged_by_bar_knockdown = false;
 
 	self.gibbed = false; 
 	self.head_gibbed = false;
-	
-	// might need this so co-op zombie players cant block zombie pathing
-//	self PushPlayer( true ); 
-//	self.meleeRange = 128; 
-//	self.meleeRangeSq = anim.meleeRange * anim.meleeRange; 
 
-	self setPhysParams( 15, 0, 72 );
+	self setPhysParams(15, 0, 72);
 	self.goalradius = 32;
 	
 	self.disableArrivals = true; 
@@ -904,71 +592,39 @@ function zombie_spawn_init()
 	self.dontShootWhileMoving = true;
 	self.pathenemylookahead = 0;
 
-
-	self.holdfire			= true;	//no firing - performance gain
+	// no firing - performance gain
+	self.holdfire = true;
 
 	self.badplaceawareness = 0;
 	self.chatInitialized = false;
 	self.missingLegs = false;
-
-	if ( !isdefined( self.zombie_arms_position ) )
-	{
-		if(randomint( 2 ) == 0)
-			self.zombie_arms_position = "up";
-		else
-			self.zombie_arms_position = "down";
-	}
 	
 	self.a.disablepain = true;
 	self zm_utility::disable_react(); // SUMEET - zombies dont use react feature.
 
-	// if ( isdefined( level.zombie_health ) )
-	// {
-		// self.maxhealth = level.zombie_health; 
-		
-		// if( IsDefined(level.a_zombie_respawn_health[ self.archetype ] ) && level.a_zombie_respawn_health[ self.archetype ].size > 0 )
-		// {
-			// self.health = level.a_zombie_respawn_health[ self.archetype ][0];
-			// ArrayRemoveValue(level.a_zombie_respawn_health[ self.archetype ], level.a_zombie_respawn_health[ self.archetype ][0]);		
-		// }
-		// else
-		// {
-			// self.health = level.zombie_health;
-		// }	 
-	// }
-	// else
-	// {
-		// self.maxhealth = level.zombie_vars["zombie_health_start"]; 
-		// self.health = self.maxhealth; 
-	// }
-
 	self.freezegun_damage = 0;
+	self.flame_damage_time = 0;
 
-	//setting avoidance parameters for zombies
-	self setAvoidanceMask( "avoid none" );
+	// setting avoidance parameters for zombies
+	self setAvoidanceMask("avoid none");
 
 	// wait for zombie to teleport into position before pathing
-	self PathMode( "dont move" );
-
-	// level thread zombie_death_event( self );
+	self PathMode("dont move");
 
 	// We need more script/code to get this to work properly
-//	self add_to_spectate_list();
-//	self random_tan(); 
 	self zm_utility::init_zombie_run_cycle(); 
 	self thread boss_think(); 
-	// self thread zombie_utility::zombie_gib_on_damage(); 
 	self thread zm_spawner::zombie_damage_failsafe();
 	
 	self thread zm_spawner::enemy_death_detection();
 
-	if(IsDefined(level._zombie_custom_spawn_logic))
+	if (isDefined(level._zombie_custom_spawn_logic))
 	{
-		if(IsArray(level._zombie_custom_spawn_logic))
+		if (isArray(level._zombie_custom_spawn_logic))
 		{
-			for(i = 0; i < level._zombie_custom_spawn_logic.size; i ++)
+			for (i = 0; i < level._zombie_custom_spawn_logic.size; i++)
 			{
-			self thread [[level._zombie_custom_spawn_logic[i]]]();
+				self thread [[level._zombie_custom_spawn_logic[i]]]();
 			}
 		}
 		else
@@ -976,47 +632,28 @@ function zombie_spawn_init()
 			self thread [[level._zombie_custom_spawn_logic]]();
 		}
 	}
-	
-	// if ( !isdefined( self.no_eye_glow ) || !self.no_eye_glow )
-	// {
-		// if ( !IS_TRUE( self.is_inert ) )
-		// {
-			// self thread zombie_utility::delayed_zombie_eye_glow();	// delayed eye glow for ground crawlers (the eyes floated above the ground before the anim started)
-		// }
-	// }
-	self.deathFunction = &zm_spawner::zombie_death_animscript;
-	self.flame_damage_time = 0;
 
-	self.meleeDamage = 60;	// 45
+	self.deathFunction = &zm_spawner::zombie_death_animscript;
+
+	self.meleeDamage = 60;
 	self.no_powerups = true;
-	
-	// self zombie_history( "zombie_spawn_init -> Spawned = " + self.origin );
 
 	self.thundergun_knockdown_func = level.basic_zombie_thundergun_knockdown;
 	self.tesla_head_gib_func = &zm_spawner::zombie_tesla_head_gib;
 
 	self.team = level.zombie_team;
-	
+
 	// No sight update
 	self.updateSight = false;
 
-	// self.heroweapon_kill_power = ZM_ZOMBIE_HERO_WEAPON_KILL_POWER;
-	// self.sword_kill_power = ZM_ZOMBIE_HERO_WEAPON_KILL_POWER;
-
-	if ( isDefined(level.achievement_monitor_func) )
+	if (isDefined(level.achievement_monitor_func))
 	{
 		self [[level.achievement_monitor_func]]();
 	}
 
-	// gamemodule post init
-	// if(isdefined(zm_utility::get_gamemode_var("post_init_zombie_spawn_func")))
-	// {
-		// self [[zm_utility::get_gamemode_var("post_init_zombie_spawn_func")]]();
-	// }
-
-	if ( isDefined( level.zombie_init_done ) )
+	if (isDefined(level.zombie_init_done))
 	{
-		self [[ level.zombie_init_done ]]();
+		self [[level.zombie_init_done]]();
 	}
 	self.zombie_init_done = true;
 
