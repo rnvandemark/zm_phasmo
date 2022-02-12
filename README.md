@@ -45,6 +45,11 @@ ghost_boss_idle_6,,,_pmzm\ghost_boss\idle6_3750ms.wav,,,UIN_MOD,,,,,,,,,0,0,95,1
 --------------------------------------------------
 3) Compile your map as usual and you are done!
 
+## Credits
+
+Some sound assets were created from free-to-use audio from:
+- Lara Sluyter, ["LARA'S HORROR SOUNDS" on YouTube](https://www.youtube.com/channel/UCejRwWhTN76XWgNVNU_ZExA)
+
 ## Useful links for development
 
 - [Collection of useful links and tips (Reddit)](https://www.reddit.com/r/CODZombies/comments/58nbvq/black_ops_3_mod_tools_super_guide/)
