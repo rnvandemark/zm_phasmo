@@ -1,7 +1,9 @@
 #using scripts\codescripts\struct;
 #using scripts\shared\flag_shared;
+#using scripts\shared\flagsys_shared;
 #using scripts\shared\array_shared;
 #using scripts\shared\hud_util_shared;
+#using scripts\shared\clientfield_shared;
 #using scripts\shared\util_shared;
 #using scripts\shared\ai\zombie_utility;
 #using scripts\zm\_zm_spawner;
@@ -13,6 +15,7 @@
 #using scripts\zm\_zm_powerups;
 
 #insert scripts\shared\aat_zm.gsh;
+#insert scripts\shared\version.gsh;
 
 #using_animtree("generic");
 
@@ -38,8 +41,11 @@ function init()
 	// away, be renamed, and/or be repurposed
 	//
 
+	clientfield::register("world", "hunt_active", VERSION_SHIP, 1, "int");
+	clientfield::register("actor", "hunt_possessed", VERSION_SHIP, 1, "int");
+
 	// Used for testing, if it is true brutus Spawns on round 1
-	level.brutus_debug = true;
+	level.brutus_debug = false;
 
 	// Used to set players invicible for testing
 	level.player_debug = false;
@@ -87,6 +93,8 @@ function main()
 
 	level activate_brutus_spawns(); 
 
+	// Spin a thread to handle the start/end of ghost hunts
+	level thread watch_ghost_boss_hunt_state();
 	// Spin a thread to handle spawning Brutuses throughout this game
 	level thread brutus_spawn_logic(); 
 }
@@ -134,6 +142,30 @@ function wait_for_activation()
 		// available, so wait for the notification.
 		level flag::wait_till(self.script_string);
 		level.brutus_spawn_points[level.brutus_spawn_points.size] = self;
+	}
+}
+
+function watch_ghost_boss_hunt_state()
+{
+	hunt_active = undefined;
+	while (1)
+	{
+		// Wait until a hunt starts or finishes
+		level waittill("ghost_boss_hunt_active", hunt_active);
+
+		// Set the client field to either 0 (false) or 1 (true)
+		level clientfield::set("hunt_active", hunt_active);
+
+		// Mark all of the zombies' possession as 0 (false, free-to-think)
+		// or 1 (true, possessed)
+		all_zombies = zombie_utility::get_zombie_array();
+		foreach (zomb in all_zombies)
+		{
+			if (!zomb.is_boss)
+			{
+				zomb clientfield::set("hunt_possessed", hunt_active);
+			}
+		}
 	}
 }
 
@@ -211,6 +243,8 @@ function spawn_brutus()
 	playsound_to_players("brutus_vox_spawn");
 	playsound_to_players("brutus_spawn_short");
 
+	level notify("ghost_boss_hunt_active", 1);
+
 	// Spawn Brutus with the Brutus spawner entity
 	// Build him, and run threads to help maintain him
 	brutus = zombie_utility::spawn_zombie(spawner);
@@ -218,7 +252,7 @@ function spawn_brutus()
 	brutus thread idle_sounds();
 	brutus thread check_for_ghost_reached_player();
 	brutus thread note_tracker();
-	brutus thread new_death();
+	brutus thread watch_hunt_end();
 	brutus thread aat_override();
 	brutus thread zombie_utility::round_spawn_failsafe();
 
@@ -265,17 +299,6 @@ function spawn_brutus()
 	brutus AnimScripted("note_notify", brutus.origin, brutus.angles, %brutus_spawn);
 	PlayFx(SPAWN_FX, brutus.origin);
 	wait(GetAnimLength(%brutus_spawn)); // Wait until the end of the animation
-
-	all_zombies = zombie_utility::get_zombie_array();
-	foreach (zomb in all_zombies)
-	{
-		if (!zomb.is_boss)
-		{
-			//
-			// Do stuff here to all other zombies
-			//
-		}
-	}
 
 	brutus thread custom_find_flesh();
 }
@@ -358,7 +381,6 @@ function custom_find_flesh()
 		{
 			// Brutus needs to reevaluate his current target player, set it as
 			// the current closet
-			nsz_iprintlnbold("^3Aquiring New Brutus Target");
 			targets = array::get_all_closest(self.origin, getplayers());
 			for (i = 0; i < targets.size; i++)
 			{
@@ -367,7 +389,6 @@ function custom_find_flesh()
 					self.brutus_enemy = targets[i];
 					self.v_zombie_custom_goal_pos = self.brutus_enemy.origin;
 
-					nsz_iprintlnbold("^2Aquired New Brutus Target");
 					if (!isDefined(targets[i].brutus_track_countdown))
 					{
 						targets[i].brutus_track_countdown = 2;
@@ -467,10 +488,13 @@ function note_tracker()
 	}
 }
 
-function new_death()
+function watch_hunt_end()
 {
 	// Wait until Brutus dies
 	self waittill("death");
+
+	// Notify of the ghost hunt ending
+	level notify("ghost_boss_hunt_active", 0);
 
 	// Mark Brutus as dead and inactive
 	level.brutus_active = false;

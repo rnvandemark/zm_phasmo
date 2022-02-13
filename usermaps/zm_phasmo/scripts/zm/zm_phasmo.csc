@@ -35,13 +35,13 @@
 #using scripts\zm\_zm_trap_electric;
 
 #using scripts\zm\zm_usermap;
+#using scripts\_NSZ\nsz_brutus;
 
 function main()
 {
+	brutus::init();
 	zm_usermap::main();
-
 	include_weapons();
-	
 	util::waitforclient( 0 );
 }
 
