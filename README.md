@@ -57,6 +57,7 @@ Some sound assets were created from free-to-use audio from:
 - [Modme - Importing models from other CoD games](https://wiki.modme.co/wiki/black_ops_3/basics/Import-models-from-Call-of-Duty-games.html)
 - [Zeroy - BO3 source code explorer](https://bo3explorer.zeroy.com/globals.html)
 - [Zeroy - Scripting syntax and grammar](https://wiki.zeroy.com/index.php?title=Call_of_Duty_5:_Scripting_Syntax_And_Grammar)
+- [Extensive BO3 code list](https://www.ugx-mods.com/forum/scripting/91/bo3-code-list/14199/)
 
 Local files:
 - /your/path/to/Steam/steamapps/common/Call of Duty Black Ops III/docs_modtools/bo3_scriptapifunctions.htm
