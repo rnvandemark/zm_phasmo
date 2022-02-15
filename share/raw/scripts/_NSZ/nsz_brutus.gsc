@@ -16,6 +16,7 @@
 
 #insert scripts\shared\aat_zm.gsh;
 #insert scripts\shared\version.gsh;
+#insert scripts\_NSZ\nsz_brutus.gsh;
 
 #using_animtree("generic");
 
@@ -93,8 +94,9 @@ function main()
 
 	level activate_brutus_spawns(); 
 
-	// Spin a thread to handle the start/end of ghost hunts
-	level thread watch_ghost_boss_hunt_state();
+	// Spin thread to handle the start/end of ghost hunts
+	level thread watch_ghost_boss_hunt_start();
+	level thread watch_ghost_boss_hunt_finish();
 	// Spin a thread to handle spawning Brutuses throughout this game
 	level thread brutus_spawn_logic(); 
 }
@@ -145,25 +147,57 @@ function wait_for_activation()
 	}
 }
 
-function watch_ghost_boss_hunt_state()
+function watch_ghost_boss_hunt_start()
 {
-	hunt_active = undefined;
+	level endon("end_game");
 	while (1)
 	{
-		// Wait until a hunt starts or finishes
-		level waittill("ghost_boss_hunt_active", hunt_active);
+		// Wait until a hunt starts
+		level waittill(NOTIFY_HUNT_STARTED);
+		nsz_iprintlnbold("Hunt started");
 
-		// Set the client field to either 0 (false) or 1 (true)
-		level clientfield::set("hunt_active", hunt_active);
+		// Set the hunt status client field to 'true'
+		level clientfield::set("hunt_active", 1);
 
-		// Mark all of the zombies' possession as 0 (false, free-to-think)
-		// or 1 (true, possessed)
+		// Pause zombie spawning
+		level flag::set_val("spawn_zombies", 0);
+
+		// 'Possess' all of the zombies
 		all_zombies = zombie_utility::get_zombie_array();
 		foreach (zomb in all_zombies)
 		{
 			if (!zomb.is_boss)
 			{
-				zomb clientfield::set("hunt_possessed", hunt_active);
+				zomb clientfield::set("hunt_possessed", 1);
+				zomb thread possess_zombie();
+			}
+		}
+	}
+}
+
+function watch_ghost_boss_hunt_finish()
+{
+	level endon("end_game");
+	while (1)
+	{
+		// Wait until a hunt finishes
+		level waittill(NOTIFY_HUNT_FINISHED);
+		nsz_iprintlnbold("Hunt finished");
+
+		// Set the hunt status client field to 'false'
+		level clientfield::set("hunt_active", 0);
+
+		// Resume zombie spawning
+		level flag::set_val("spawn_zombies", 1);
+
+		all_zombies = zombie_utility::get_zombie_array();
+		foreach (zomb in all_zombies)
+		{
+			if (isDefined(zomb) && !zomb.is_boss)
+			{
+				zomb clientfield::set("hunt_possessed", 0);
+				level.zombie_total++;
+				zomb doDamage(2*zomb.health, zomb.origin);
 			}
 		}
 	}
@@ -243,7 +277,7 @@ function spawn_brutus()
 	playsound_to_players("brutus_vox_spawn");
 	playsound_to_players("brutus_spawn_short");
 
-	level notify("ghost_boss_hunt_active", 1);
+	level notify(NOTIFY_HUNT_STARTED);
 
 	// Spawn Brutus with the Brutus spawner entity
 	// Build him, and run threads to help maintain him
@@ -301,6 +335,29 @@ function spawn_brutus()
 	wait(GetAnimLength(%brutus_spawn)); // Wait until the end of the animation
 
 	brutus thread custom_find_flesh();
+}
+
+function possess_zombie()
+{
+	self endon("death");
+	possible_suffices = [];
+	possible_suffices[0]= "a";
+	possible_suffices[1]= "b";
+	possible_suffices[2]= "c";
+	possible_suffices[3]= "d";
+	possible_suffices[4]= "e";
+	anim_name = "ai_zombie_zod_";
+	if (self.missingLegs)
+	{
+		anim_name = anim_name + "crawl_";
+	}
+	anim_name = anim_name + "stunned_electrobolt_" + possible_suffices[randomint(possible_suffices.size)];
+	anim_length = GetAnimLength(anim_name);
+	while (1)
+	{
+		self AnimScripted("placeholder", self.origin, self.angles, anim_name);
+		wait(anim_length);
+	}
 }
 
 function aat_override()
@@ -494,7 +551,7 @@ function watch_hunt_end()
 	self waittill("death");
 
 	// Notify of the ghost hunt ending
-	level notify("ghost_boss_hunt_active", 0);
+	level notify(NOTIFY_HUNT_FINISHED);
 
 	// Mark Brutus as dead and inactive
 	level.brutus_active = false;
