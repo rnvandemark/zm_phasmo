@@ -23,3 +23,10 @@ xmodel,bo2_brutus_fb_death
 // Frost Iceforge's custom eye color
 fx,frost_iceforge/red_zombie_eyes.efx
 fx,frost_iceforge/white_zombie_eyes.efx
+
+// SG4Y Flashlight FX
+scriptparsetree,scripts/sg4y/flashlight/zm_flashlight.gsc
+scriptparsetree,scripts/sg4y/flashlight/zm_flashlight.csc
+fx,sg4y/flashlight/flashlight_loop
+fx,sg4y/flashlight/flashlight_loop_world
+fx,sg4y/flashlight/flashlight_loop_view_moths

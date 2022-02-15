@@ -55,6 +55,9 @@
 // ZM Phasmo
 #using scripts\_pmzm\pmzm_ghost;
 
+// SG4Y Flashlight
+#using scripts\sg4y\flashlight\zm_flashlight;
+
 //*****************************************************************************
 // MAIN
 //*****************************************************************************
