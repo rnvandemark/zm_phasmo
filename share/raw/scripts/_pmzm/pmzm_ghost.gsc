@@ -16,11 +16,11 @@
 
 #insert scripts\shared\aat_zm.gsh;
 #insert scripts\shared\version.gsh;
-#insert scripts\_NSZ\nsz_brutus.gsh;
+#insert scripts\_pmzm\pmzm_ghost.gsh;
 
 #using_animtree("generic");
 
-#namespace brutus;
+#namespace pmzm_ghost;
 
 #precache("model", "bo2_brutus_fb_death");
 

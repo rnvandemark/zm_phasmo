@@ -52,8 +52,8 @@
 
 #using scripts\zm\zm_usermap;
 
-// NSZ Brutus
-#using scripts\_NSZ\nsz_brutus;
+// ZM Phasmo
+#using scripts\_pmzm\pmzm_ghost;
 
 //*****************************************************************************
 // MAIN
@@ -61,8 +61,8 @@
 
 function main()
 {
-	// NSZ Brutus
-	brutus::init();
+	// ZM Phasmo
+	pmzm_ghost::init();
 
 	level.dog_rounds_allowed = 0;
 	zm_usermap::main();
@@ -88,4 +88,3 @@ function custom_add_weapons()
 {
 	zm_weapons::load_weapon_spec_from_table("gamedata/weapons/zm/zm_levelcommon_weapons.csv", 1);
 }
-

@@ -15,8 +15,8 @@ scriptparsetree,scripts/zm/zm_phasmo.gsc
 scriptparsetree,scripts/zm/zm_phasmo.csc
 
 // NSZ Brutus
-scriptparsetree,scripts/_NSZ/nsz_brutus.gsc
-scriptparsetree,scripts/_NSZ/nsz_brutus.csc
+scriptparsetree,scripts/_pmzm/pmzm_ghost.gsc
+scriptparsetree,scripts/_pmzm/pmzm_ghost.csc
 scriptbundle,brutus_bundle
 xmodel,brutus_helmet
 xmodel,bo2_brutus_fb_death

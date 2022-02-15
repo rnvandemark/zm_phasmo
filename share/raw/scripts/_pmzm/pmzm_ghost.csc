@@ -8,7 +8,7 @@
 #define GHOST_HUNT_ZOMBIE_EYE_FX "frost_iceforge/white_zombie_eyes"
 #precache("client_fx", GHOST_HUNT_ZOMBIE_EYE_FX);
 
-#namespace brutus;
+#namespace pmzm_ghost;
 
 function init()
 {
