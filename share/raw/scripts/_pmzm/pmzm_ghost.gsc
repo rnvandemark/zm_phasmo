@@ -24,9 +24,6 @@
 
 #precache("model", "bo2_brutus_fb_death");
 
-#define SPAWN_FX "_NSZ/Brutus/spawn_fx"
-#precache("fx", SPAWN_FX);
-
 function nsz_iprintlnbold(string)
 {
 	if (level.nsz_debug)
@@ -273,10 +270,6 @@ function spawn_brutus()
 	playsound_to_players("ghost_boss_prespawn_" + prespawn_sound_suffix);
 	wait(10);
 
-	// Play additional Brutus sounds as he's spawning in
-	playsound_to_players("brutus_vox_spawn");
-	playsound_to_players("brutus_spawn_short");
-
 	level notify(NOTIFY_HUNT_STARTED);
 
 	// Spawn Brutus with the Brutus spawner entity
@@ -331,7 +324,6 @@ function spawn_brutus()
 	
 	brutus ForceTeleport(spot.origin, spot.angles, 1);
 	brutus AnimScripted("note_notify", brutus.origin, brutus.angles, %brutus_spawn);
-	PlayFx(SPAWN_FX, brutus.origin);
 	wait(GetAnimLength(%brutus_spawn)); // Wait until the end of the animation
 
 	brutus thread custom_find_flesh();
@@ -523,8 +515,6 @@ function note_tracker()
 		self waittill("note_notify", note); 
 		if (note == "swing")
 		{
-			self PlaySound("brutus_swing_0" + randomint(2)); 
-			PlaySoundAtPosition("brutus_vox_swing", self.origin);
 			foreach (player in getplayers())
 			{
 				if (Distance2d(player.origin, self.origin) < 150 && self.brutus_enemy == player)
@@ -535,12 +525,9 @@ function note_tracker()
 		}
 		if (note == "spawn_complete")
 		{
-			self playsound("brutus_spawn");
 		}
 		if (note == "summon")
 		{
-			self playsound("brutus_spawn");
-			PlaySoundAtPosition("brutus_vox_yell", self.origin);
 		}
 	}
 }
@@ -557,15 +544,8 @@ function watch_hunt_end()
 	level.brutus_active = false;
 	nsz_iprintlnbold("^2Brutus Died");
 
-	// Reuse the spawn effect
-	PlayFx(SPAWN_FX, self.origin);
-
 	// Spawn a random powerup
 	thread zm_powerups::specific_powerup_drop(undefined, self.origin);
-
-	// Overlap a couple of death sounds
-	self PlaySound("brutus_defeated_0" + randomintrange(0, 3));
-	self PlaySound("brutus_death");
 
 	// Clone the Brutus model and adjust the angles to the specified pose
 	// Hide the delete the model of the Brutus that was originally killed
