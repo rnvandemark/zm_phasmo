@@ -58,6 +58,9 @@
 // SG4Y Flashlight
 #using scripts\sg4y\flashlight\zm_flashlight;
 
+// Flamethrower (temporary, will turn into part of upgraded thermometer)
+#using scripts\zm\zm_flamethrower;
+
 //*****************************************************************************
 // MAIN
 //*****************************************************************************
@@ -66,11 +69,15 @@ function main()
 {
 	// ZM Phasmo
 	pmzm_ghost::init();
+	// Flamethrower (temporary, will turn into part of upgraded thermometer)
+	zm_flamethrower::init();
 
 	level.dog_rounds_allowed = 0;
 	zm_usermap::main();
 	
 	level._zombie_custom_add_weapons =&custom_add_weapons;
+
+	level.start_weapon = getWeapon("m2_flamethrower");
 	
 	//Setup the levels Zombie Zone Volumes
 	level.zones = [];
