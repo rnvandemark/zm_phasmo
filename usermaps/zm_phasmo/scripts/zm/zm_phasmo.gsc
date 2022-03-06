@@ -53,10 +53,7 @@
 #using scripts\zm\zm_usermap;
 
 // ZM Phasmo
-#using scripts\_pmzm\pmzm_ghost;
-
-// SG4Y Flashlight
-#using scripts\sg4y\flashlight\zm_flashlight;
+#using scripts\_pmzm\pmzm_common;
 
 //*****************************************************************************
 // MAIN
@@ -65,15 +62,13 @@
 function main()
 {
 	// ZM Phasmo
-	pmzm_ghost::init();
+	pmzm_common::init();
 
 	level.dog_rounds_allowed = 0;
 	zm_usermap::main();
 	
 	level._zombie_custom_add_weapons =&custom_add_weapons;
 
-	level.start_weapon = getWeapon("pmzm_thermometer_upgraded");
-	
 	//Setup the levels Zombie Zone Volumes
 	level.zones = [];
 	level.zone_manager_init_func =&usermap_test_zone_init;

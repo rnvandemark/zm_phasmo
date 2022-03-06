@@ -15,8 +15,14 @@ scriptparsetree,scripts/zm/zm_phasmo.gsc
 scriptparsetree,scripts/zm/zm_phasmo.csc
 
 // PMZM Phasmo
+scriptparsetree,scripts/_pmzm/pmzm_common.gsc
+scriptparsetree,scripts/_pmzm/pmzm_flashlight.gsc
+scriptparsetree,scripts/_pmzm/pmzm_flashlight.csc
 scriptparsetree,scripts/_pmzm/pmzm_ghost.gsc
 scriptparsetree,scripts/_pmzm/pmzm_ghost.csc
+fx,_pmzm/flashlight/flashlight_loop
+fx,_pmzm/flashlight/flashlight_loop_world
+fx,_pmzm/flashlight/flashlight_loop_view_moths
 scriptbundle,brutus_bundle
 xmodel,bo2_brutus_fb_death
 weapon,pmzm_thermometer_upgraded
@@ -24,10 +30,3 @@ weapon,pmzm_thermometer_upgraded
 // Frost Iceforge's custom eye color
 fx,frost_iceforge/red_zombie_eyes.efx
 fx,frost_iceforge/white_zombie_eyes.efx
-
-// SG4Y Flashlight FX
-scriptparsetree,scripts/sg4y/flashlight/zm_flashlight.gsc
-scriptparsetree,scripts/sg4y/flashlight/zm_flashlight.csc
-fx,sg4y/flashlight/flashlight_loop
-fx,sg4y/flashlight/flashlight_loop_world
-fx,sg4y/flashlight/flashlight_loop_view_moths

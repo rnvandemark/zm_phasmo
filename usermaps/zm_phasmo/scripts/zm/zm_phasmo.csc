@@ -35,8 +35,8 @@
 #using scripts\zm\_zm_trap_electric;
 
 #using scripts\zm\zm_usermap;
+#using scripts\_pmzm\pmzm_flashlight;
 #using scripts\_pmzm\pmzm_ghost;
-#using scripts\sg4y\flashlight\zm_flashlight;
 
 function main()
 {

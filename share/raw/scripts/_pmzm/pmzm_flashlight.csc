@@ -5,22 +5,22 @@
 #insert scripts\shared\shared.gsh;
 #insert scripts\shared\version.gsh;
 
-#namespace zm_flashlight;
+#namespace pmzm_flashlight;
 // dont replace anything in your .csc, only add stuff :)
 
-#precache ("client_fx", "sg4y/flashlight/flashlight_loop");
-#precache ("client_fx", "sg4y/flashlight/flashlight_loop_world");
-#precache ("client_fx", "sg4y/flashlight/flashlight_loop_view_moths");
+#precache ("client_fx", "_pmzm/flashlight/flashlight_loop");
+#precache ("client_fx", "_pmzm/flashlight/flashlight_loop_world");
+#precache ("client_fx", "_pmzm/flashlight/flashlight_loop_view_moths");
 
-REGISTER_SYSTEM( "zm_flashlight", &main, undefined )
+REGISTER_SYSTEM( "pmzm_flashlight", &main, undefined )
 
 function main()
 {
     //// LEVEL EFFECTS //// ##############################################################################
 
-    level._effect[ "flashlight_fx_loop_view" ]          = "sg4y/flashlight/flashlight_loop";
-    level._effect[ "flashlight_fx_loop_view_moths" ]    = "sg4y/flashlight/flashlight_loop_view_moths";
-    level._effect[ "flashlight_fx_loop_world" ]         = "sg4y/flashlight/flashlight_loop_world";
+    level._effect[ "flashlight_fx_loop_view" ]          = "_pmzm/flashlight/flashlight_loop";
+    level._effect[ "flashlight_fx_loop_view_moths" ]    = "_pmzm/flashlight/flashlight_loop_view_moths";
+    level._effect[ "flashlight_fx_loop_world" ]         = "_pmzm/flashlight/flashlight_loop_world";
 
     //// CLIENTFIELDS //// ##############################################################################
 
