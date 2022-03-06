@@ -19,15 +19,11 @@ scriptparsetree,scripts/_pmzm/pmzm_ghost.gsc
 scriptparsetree,scripts/_pmzm/pmzm_ghost.csc
 scriptbundle,brutus_bundle
 xmodel,bo2_brutus_fb_death
+weapon,pmzm_thermometer_upgraded
 
 // Frost Iceforge's custom eye color
 fx,frost_iceforge/red_zombie_eyes.efx
 fx,frost_iceforge/white_zombie_eyes.efx
-
-// Zeroy's Flamethrower
-scriptparsetree,scripts/zm/zm_flamethrower.gsc
-xmodel,gear_flametank
-weapon,m2_flamethrower
 
 // SG4Y Flashlight FX
 scriptparsetree,scripts/sg4y/flashlight/zm_flashlight.gsc

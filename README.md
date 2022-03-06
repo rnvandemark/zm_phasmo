@@ -19,19 +19,17 @@ ghost_boss_idle_3,,,_pmzm\ghost_boss\idle3_1250ms.wav,,,UIN_MOD,,,,,,,,,0,0,95,1
 ghost_boss_idle_4,,,_pmzm\ghost_boss\idle4_4600ms.wav,,,UIN_MOD,,,,,,,,,0,0,95,100,0,1750,2000,,,,,,,,,,,,,,,,3d,,,NONLOOPING,,,0,0,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ghost_boss_idle_5,,,_pmzm\ghost_boss\idle5_3750ms.wav,,,UIN_MOD,,,,,,,,,0,0,95,100,0,1750,2000,,,,,,,,,,,,,,,,3d,,,NONLOOPING,,,0,0,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ghost_boss_idle_6,,,_pmzm\ghost_boss\idle6_3750ms.wav,,,UIN_MOD,,,,,,,,,0,0,95,100,0,1750,2000,,,,,,,,,,,,,,,,3d,,,NONLOOPING,,,0,0,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-# ====== Zeroy's  Flamethrower =======,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_start,,,weapons\flamethrower\wpn_flm_ignite.wav,,,WPN_SHOT_PLR,,,,,BUS_FX,,,wpn_cmn_shot_plr,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_fireloop,,,weapons\flamethrower\wpn_flmthwr_st_flame.wav,,,WPN_SHOT_PLR,,,,,BUS_FX,,,wpn_cmn_shot_plr,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,LOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_cooldown,,,weapons\flamethrower\wpn_flm_cooldown.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_rear,,,weapons\flamethrower\wpn_flmthwr_st_r.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_off,,,weapons\flamethrower\wpn_flm_ignite.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_swtnr,,,weapons\flamethrower\wpn_flm_ignite.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_start_3p,,,weapons\flamethrower\wpn_flm_ignite.wav,,,WPN_SHOT_NPC,,,,,BUS_FX,,,wpn_cmn_shot_3p,,,,,,,,,,,,,,,,,,,,,,,3d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_fireloop_3p,,,weapons\flamethrower\wpn_flm_cooldown.wav,,,WPN_SHOT_NPC,,,,,BUS_FX,,,wpn_cmn_shot_3p,,,,,,,,,,,,,,,,,,,,,,,3d,wpn_fnt,,LOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_cooldown_3p,,,weapons\flamethrower\wpn_flm_cooldown.wav,,,WPN_SHOT_NPC,,,,,BUS_FX,,,wpn_cmn_shot_3p,,,,,,,,,,,,,,,,,,,,,,,3d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_foley_F,,,weapons\flamethrower\foley\flame_front.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,70,70,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,LOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_foley_R,,,weapons\flamethrower\foley\flame_rear.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,70,70,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_flamethrower_raise,,,weapons\flamethrower\wpn_incindiary_core_start.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+# ====== Phasmo Flamethrower =======
+thermometer_upgraded_raise,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_raise.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_start_1p,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_start.wav,,,WPN_SHOT_PLR,,,,,BUS_FX,,,wpn_cmn_shot_plr,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_fireloop_1p,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_fireloop.wav,,,WPN_SHOT_PLR,,,,,BUS_FX,,,wpn_cmn_shot_plr,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,LOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_cooldown_1p,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_cooldown.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_start_3p,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_start.wav,,,WPN_SHOT_NPC,,,,,BUS_FX,,,wpn_cmn_shot_3p,,,,,,,,,,,,,,,,,,,,,,,3d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_fireloop_3p,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_fireloop.wav,,,WPN_SHOT_NPC,,,,,BUS_FX,,,wpn_cmn_shot_3p,,,,,,,,,,,,,,,,,,,,,,,3d,wpn_fnt,,LOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_cooldown_3p,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_cooldown.wav,,,WPN_SHOT_NPC,,,,,BUS_FX,,,wpn_cmn_shot_3p,,,,,,,,,,,,,,,,,,,,,,,3d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_rear,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_rear.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_off,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_start.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_pickup,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_pickup.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,70,70,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,LOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 # ======= SG4Y Flashlight ========
 flashlight_click,,,sg4y\flashlight\flashlight_click.wav,,,UIN_MOD,,,,,,,,,0,0,100,100,0,100,300,,,,,,,,,,,,,,,,3d,,,NONLOOPING,,,0,0,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ```
@@ -43,6 +41,9 @@ flashlight_click,,,sg4y\flashlight\flashlight_click.wav,,,UIN_MOD,,,,,,,,,0,0,10
 
 Some sound assets were created from free-to-use audio from:
 - Lara Sluyter, ["LARA'S HORROR SOUNDS" on YouTube](https://www.youtube.com/channel/UCejRwWhTN76XWgNVNU_ZExA)
+
+Some models made available online were used for the following:
+- [Thermometer (Upgraded)](https://sketchfab.com/3d-models/pistol-d43323a1e2c54a17bc226708a7ada34d)
 
 ## Useful links for development
 
