@@ -25,7 +25,8 @@ fx,_pmzm/flashlight/flashlight_loop_world
 fx,_pmzm/flashlight/flashlight_loop_view_moths
 scriptbundle,brutus_bundle
 xmodel,bo2_brutus_fb_death
-weapon,pmzm_thermometer_upgraded
+weapon,pmzm_thermometer_upgraded_zm
+weapon,pmzm_thermometer_upgraded_alt_zm
 
 // Frost Iceforge's custom eye color
 fx,frost_iceforge/red_zombie_eyes.efx
