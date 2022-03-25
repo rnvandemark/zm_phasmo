@@ -20,10 +20,15 @@ scriptparsetree,scripts/_pmzm/pmzm_flashlight.gsc
 scriptparsetree,scripts/_pmzm/pmzm_flashlight.csc
 scriptparsetree,scripts/_pmzm/pmzm_ghost.gsc
 scriptparsetree,scripts/_pmzm/pmzm_ghost.csc
+scriptparsetree,scripts/_pmzm/pmzm_thermometer.gsc
 fx,_pmzm/flashlight/flashlight_loop
 fx,_pmzm/flashlight/flashlight_loop_world
 fx,_pmzm/flashlight/flashlight_loop_view_moths
+fx,_pmzm/weapons/thermometer_upgraded/icegun_icewind
+fx,_pmzm/weapons/thermometer_upgraded/icegun_ice_grow
+fx,_pmzm/weapons/thermometer_upgraded/icegun_ice_shatter
 scriptbundle,brutus_bundle
+xmodel,p_zombie_ice_chunk_01
 xmodel,bo2_brutus_fb_death
 weapon,pmzm_thermometer_upgraded_zm
 weapon,pmzm_thermometer_upgraded_alt_zm

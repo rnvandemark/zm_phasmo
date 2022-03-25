@@ -32,6 +32,10 @@ thermometer_upgraded_cooldown_3p,,,_pmzm\weapons\thermometer_upgraded\thermomete
 thermometer_upgraded_rear,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_rear.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 thermometer_upgraded_off,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_start.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 thermometer_upgraded_pickup,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_pickup.wav,,,WPN_RELOAD_PLR,,,,,BUS_FX,,,,,,70,70,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,LOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_alt_fire_1p,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_alt_fire.wav,,,WPN_SHOT_PLR,,,,,BUS_FX,,,wpn_cmn_shot_plr,,,,,,,,,,,,,,,,,,,,,,,2d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+thermometer_upgraded_alt_fire_3p,,,_pmzm\weapons\thermometer_upgraded\thermometer_upgraded_alt_fire.wav,,,WPN_SHOT_NPC,,,,,BUS_FX,,,wpn_cmn_shot_3p,,,,,,,,,,,,,,,,,,,,,,,3d,wpn_fnt,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,,,,,YES,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+# ======= Phasmo Misc ========
+ice_shatter,,,_pmzm\misc\ice_shatter.wav,,,UIN_MOD,,,,,,,,,0,0,95,100,0,900,1000,,,,,,,,,,,,,,,,3d,,,NONLOOPING,,,0,0,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ```
 
 --------------------------------------------------
