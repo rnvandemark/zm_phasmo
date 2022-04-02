@@ -12,9 +12,7 @@
 #precache ("client_fx", "_pmzm/flashlight/flashlight_loop_world");
 #precache ("client_fx", "_pmzm/flashlight/flashlight_loop_view_moths");
 
-REGISTER_SYSTEM( "pmzm_flashlight", &main, undefined )
-
-function main()
+function init()
 {
     //// LEVEL EFFECTS //// ##############################################################################
 

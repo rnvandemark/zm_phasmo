@@ -16,11 +16,16 @@ scriptparsetree,scripts/zm/zm_phasmo.csc
 
 // PMZM Phasmo
 scriptparsetree,scripts/_pmzm/pmzm_common.gsc
+scriptparsetree,scripts/_pmzm/pmzm_common.csc
 scriptparsetree,scripts/_pmzm/pmzm_flashlight.gsc
 scriptparsetree,scripts/_pmzm/pmzm_flashlight.csc
 scriptparsetree,scripts/_pmzm/pmzm_ghost.gsc
 scriptparsetree,scripts/_pmzm/pmzm_ghost.csc
 scriptparsetree,scripts/_pmzm/pmzm_thermometer.gsc
+scriptparsetree,scripts/_pmzm/pmzm_thermometer.csc
+scriptparsetree,scripts/_pmzm/pmzm_temperature_monitor.gsc
+scriptparsetree,scripts/_pmzm/pmzm_temperature_monitor.csc
+fx,_pmzm/misc/fx_cold_breath_1p
 fx,_pmzm/flashlight/flashlight_loop
 fx,_pmzm/flashlight/flashlight_loop_world
 fx,_pmzm/flashlight/flashlight_loop_view_moths
@@ -32,6 +37,8 @@ xmodel,p_zombie_ice_chunk_01
 xmodel,bo2_brutus_fb_death
 weapon,pmzm_thermometer_upgraded_zm
 weapon,pmzm_thermometer_upgraded_alt_zm
+rawfile,ui/uieditor/widgets/hud/_pmzm/pmzm_thermometer_upgraded.lua
+rawfile,ui/uieditor/menus/hud/hud_zm_phasmo.lua
 
 // Frost Iceforge's custom eye color
 fx,frost_iceforge/red_zombie_eyes.efx
